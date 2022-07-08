@@ -1,4 +1,4 @@
 package sara
 
 object Hello:
-  val name = "Sarah"
+  val name = "Sara"
