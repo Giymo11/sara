@@ -1,35 +1,36 @@
-import org.scalajs.linker.interface.ModuleSplitStyle
+ThisBuild / scalaVersion := "3.1.3"
 
-val fastLinkOutputDir = taskKey[String]("output directory for `npm run dev`")
-val fullLinkOutputDir = taskKey[String]("output directory for `npm run build`")
-
-lazy val sara = project
-  .in(file("."))
+lazy val frontend = project
+  .in(file("frontend"))
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    scalaVersion := "3.1.2",
-    scalacOptions ++= Seq("-encoding", "utf-8", "-deprecation", "-feature"),
-
-    // We have a `main` method
     scalaJSUseMainModuleInitializer := true,
-
-    // Emit modules in the most Vite-friendly way
-    scalaJSLinkerConfig ~= {
-      _.withModuleKind(ModuleKind.ESModule)
-        .withModuleSplitStyle(ModuleSplitStyle.SmallModulesFor(List("sara")))
-    },
-
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.2.0",
-
-    fastLinkOutputDir := {
-      // Ensure that fastLinkJS has run, then return its output directory
-      (Compile / fastLinkJS).value
-      (Compile / fastLinkJS / scalaJSLinkerOutputDirectory).value.getAbsolutePath()
-    },
-
-    fullLinkOutputDir := {
-      // Ensure that fullLinkJS has run, then return its output directory
-      (Compile / fullLinkJS).value
-      (Compile / fullLinkJS / scalaJSLinkerOutputDirectory).value.getAbsolutePath()
-    },
+    libraryDependencies ++= Seq(
+      "org.scala-js" %%% "scalajs-dom" % "2.0.0"
+    )
   )
+  .dependsOn(shared.js)
+
+lazy val backend = project
+  .in(file("backend"))
+  .settings(
+    libraryDependencies ++= Seq(
+    ),
+    Compile / resourceGenerators += Def.task {
+      val source = (frontend / Compile / scalaJSLinkedFile).value.data
+      val dest = (Compile / resourceManaged).value / "assets" / "main.js"
+      IO.copy(Seq(source -> dest))
+      Seq(dest)
+    },
+    run / fork := true
+  )
+  .dependsOn(shared.jvm)
+
+lazy val shared = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("shared"))
+  .settings(
+    libraryDependencies ++= Seq()
+  )
+
+
