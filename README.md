@@ -12,12 +12,6 @@ from: https://www.youtube.com/watch?v=dv7fPmgFTNA
 
 # getting started
 
-`choco install sbt` or `scoop install sbt`
-
-`npm create vite@latest`
-`cd xxx`
-`npm install`
-`npm run dev`
 
 ## scala build setup
 
@@ -27,12 +21,17 @@ sbt.version = 1.6.2
 // project/plugins.sbt
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.10.0")
 
-`sbt ~fastLinkJS`
 
-also
-`npm run build`
-`cd dist`
-`npx http-server`
+# Frontend
 
+`sbt ~frontend/fastLinkJS`
+
+at the same time
+
+`cd frontend`
+`npm install`
+`npm run dev`
+
+this compiles and displays your frontend project on every file save
 
 
