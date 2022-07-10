@@ -9,6 +9,7 @@ val Versions =
   }
 
 ThisBuild / scalaVersion := Versions.scala
+ThisBuild / crossScalaVersions := Seq(Versions.scala)
 ThisBuild / versionScheme := Some("early-semver")
 
 // to disable publishing
@@ -19,13 +20,13 @@ ThisBuild / githubWorkflowAddedJobs := Seq(
     "lint",
     "Check for scalafmt issues",
     List(WorkflowStep.Sbt(List("scalafmtCheck, test:scalafmtCheck"))),
-    scalas = List(Versions.scala),
+    // scalas = List(Versions.scala),
   ),
   WorkflowJob(
     "dependencies",
     "Check for up to date dependencies",
     List(WorkflowStep.Sbt(List("dependencyUpdates"))),
-    scalas = List(Versions.scala),
+    // scalas = List(Versions.scala),
   ),
 )
 
