@@ -1,15 +1,14 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
 
-val scala3 = "3.1.3"
-
 val Versions =
   new {
+    val scala = "3.1.3"
     val scalajs_dom = "2.2.0"
     val munit = "0.7.29"
     val laminar = "0.14.2"
   }
 
-ThisBuild / scalaVersion := scala3
+ThisBuild / scalaVersion := Versions.scala
 
 val publicDev = taskKey[String]("output directory for `npm run dev`")
 val publicProd = taskKey[String]("output directory for `npm run build`")
