@@ -8,6 +8,13 @@ jobs:
   build:
     name: Build and Test
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+        scala-version: [Versions.scala3]
+        java-version: [8, 11, 17]
+      
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v2
@@ -16,12 +23,22 @@ jobs:
 
       - name: Setup Scala
         uses: japgolly/setup-everything-scala@v3.1
+        with:
+          java-version: ${{ matrix.java-version }}
+          node-version: ${{ matrix.node-version }}
+
+      - name: install npm deps
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
         
       - name: Build project
-        run: sbt test
+        run: sbt++field ${{ matrix.scala }} test
 
       - name: Compress target directories
-        run: tar cf targets.tar backend/target
+        run: tar cf targets.tar backend/target frontend/target
 
       - name: Upload target directories
         uses: actions/upload-artifact@v2
