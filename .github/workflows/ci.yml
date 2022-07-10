@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Scala v${{ matrix.scala-version }with Java v${{ matrix.java-version }} and Node v${{ matrix.node-version }}
+      - name: Setup Scala v${{ matrix.scala-version }} with Java v${{ matrix.java-version }} and Node v${{ matrix.node-version }}
         uses: japgolly/setup-everything-scala@v3.1
         with:
           java-version: temurin:${{ matrix.java-version }}
