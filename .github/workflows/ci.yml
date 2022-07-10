@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x, 18.x]
-        scala-version: [Versions.scala3]
+        scala-version: [Versions.scala]
         java-version: [8, 11, 17]
       
     steps:
