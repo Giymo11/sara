@@ -55,3 +55,23 @@ jobs:
 
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
+
+      - name: Compress target directories
+        run: tar cf targets.tar shared/.js/target target backend/target shared/.jvm/target frontend/target project/target
+
+      - name: Upload target directories
+        uses: actions/upload-artifact@v2
+        with:
+          name: target-${{ matrix.os }}-${{ matrix.scala }}-${{ matrix.java }}
+          path: targets.tar
+
+  lint:
+    name: Check for scalafmt issues
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        scala: [2.13.6]
+        java: [temurin@11]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - run: 'sbt ++${{ matrix.scala }} ''scalafmtCheck, test:scalafmtCheck'''
