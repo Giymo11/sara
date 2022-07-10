@@ -1,6 +1,14 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
 
-ThisBuild / scalaVersion := "3.1.3"
+val Versions =
+  new {
+    val scala = "3.1.3"
+    val scalajs_dom = "2.2.0"
+    val munit = "0.7.29"
+    val laminar = "0.14.2"
+  }
+
+ThisBuild / scalaVersion := Versions.scala
 ThisBuild / versionScheme := Some("early-semver")
 
 // to disable publishing
@@ -11,15 +19,15 @@ ThisBuild / githubWorkflowAddedJobs := Seq(
     "lint",
     "Check for scalafmt issues",
     List(WorkflowStep.Sbt(List("scalafmtCheck, test:scalafmtCheck"))),
-  )
+    scalas = List(Versions.scala),
+  ),
+  WorkflowJob(
+    "dependencies",
+    "Check for up to date dependencies",
+    List(WorkflowStep.Sbt(List("dependencyUpdates"))),
+    scalas = List(Versions.scala),
+  ),
 )
-
-val Versions =
-  new {
-    val scalajs_dom = "2.2.0"
-    val munit = "0.7.29"
-    val laminar = "0.14.2"
-  }
 
 val publicDev = taskKey[String]("output directory for `npm run dev`")
 val publicProd = taskKey[String]("output directory for `npm run build`")
