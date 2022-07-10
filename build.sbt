@@ -9,26 +9,6 @@ val Versions =
   }
 
 ThisBuild / scalaVersion := Versions.scala
-ThisBuild / crossScalaVersions := Seq(Versions.scala)
-ThisBuild / versionScheme := Some("early-semver")
-
-// to disable publishing
-ThisBuild / githubWorkflowPublishTargetBranches := Seq()
-ThisBuild / dependencyUpdatesFailBuild := true
-ThisBuild / githubWorkflowAddedJobs := Seq(
-  WorkflowJob(
-    "lint",
-    "Check for scalafmt issues",
-    List(WorkflowStep.Sbt(List("scalafmtCheck, test:scalafmtCheck"))),
-    // scalas = List(Versions.scala),
-  ),
-  WorkflowJob(
-    "dependencies",
-    "Check for up to date dependencies",
-    List(WorkflowStep.Sbt(List("dependencyUpdates"))),
-    // scalas = List(Versions.scala),
-  ),
-)
 
 val publicDev = taskKey[String]("output directory for `npm run dev`")
 val publicProd = taskKey[String]("output directory for `npm run build`")
