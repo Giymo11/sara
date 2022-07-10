@@ -13,7 +13,7 @@ jobs:
       matrix:
         node-version: [16.x, 18.x]
         java-version: [8, 11, 17]
-      
+
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v2
@@ -29,15 +29,33 @@ jobs:
       - name: install npm deps
         run: npm install
         working-directory: frontend
-        
+
       - name: Build project
         run: sbt test
+
+  check:
+    name: Check dependencies and formatting
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+        java-version: [11]
+
+    steps:
+      - name: Checkout current branch (full)
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Scala with Java v${{ matrix.java-version }} and Node v${{ matrix.node-version }}
+        uses: japgolly/setup-everything-scala@v3.1
+        with:
+          java-version: temurin:${{ matrix.java-version }}
+          node-version: ${{ matrix.node-version }}
 
       - name: Check project formatting
         run: sbt scalafmtCheck test:scalafmtCheck
 
       - name: Check project dependencies
         run: sbt dependencyUpdates
-
-
-
