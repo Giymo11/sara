@@ -54,6 +54,10 @@ jobs:
           java-version: temurin:${{ matrix.java-version }}
           node-version: ${{ matrix.node-version }}
 
+      - name: install npm deps
+        run: npm install
+        working-directory: frontend
+
       - name: Check project formatting
         run: sbt scalafmtCheck test:scalafmtCheck
 
