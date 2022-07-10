@@ -3,7 +3,7 @@ import org.scalajs.linker.interface.ModuleSplitStyle
 val Versions =
   new {
     val scala = "3.1.3"
-    val scalajs_dom = "2.0.0"
+    val scalajs_dom = "2.2.0"
     val munit = "0.7.29"
     val laminar = "0.14.2"
   }
