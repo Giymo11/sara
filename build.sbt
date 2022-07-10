@@ -1,10 +1,22 @@
 import org.scalajs.linker.interface.ModuleSplitStyle
 
 ThisBuild / scalaVersion := "3.1.3"
+ThisBuild / versionScheme := Some("early-semver")
+
+// to disable publishing
+ThisBuild / githubWorkflowPublishTargetBranches := Seq()
+ThisBuild / dependencyUpdatesFailBuild := true
+ThisBuild / githubWorkflowAddedJobs := Seq(
+  WorkflowJob(
+    "lint",
+    "Check for scalafmt issues",
+    List(WorkflowStep.Sbt(List("scalafmtCheck, test:scalafmtCheck"))),
+  )
+)
 
 val Versions =
   new {
-    val scalajs_dom = "2.0.0"
+    val scalajs_dom = "2.2.0"
     val munit = "0.7.29"
     val laminar = "0.14.2"
   }

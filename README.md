@@ -34,4 +34,13 @@ at the same time
 
 this compiles and displays your frontend project on every file save
 
+# Backend
+
+`sbt backend/run`
+
+# Test
+
+`sbt test`
+
+
 
