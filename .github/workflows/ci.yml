@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Scala v${{ matrix.scala-version }} with Java v${{ matrix.java-version }} and Node v${{ matrix.node-version }}
+      - name: Setup Scala with Java v${{ matrix.java-version }} and Node v${{ matrix.node-version }}
         uses: japgolly/setup-everything-scala@v3.1
         with:
           java-version: temurin:${{ matrix.java-version }}
@@ -34,7 +34,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
         
       - name: Build project
-        run: sbt++field ${{ matrix.scala-version }} test
+        run: sbt test
 
       - name: Compress target directories
         run: tar cf targets.tar backend/target frontend/target
