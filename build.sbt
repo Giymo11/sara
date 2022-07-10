@@ -3,7 +3,7 @@ import org.scalajs.linker.interface.ModuleSplitStyle
 val Versions =
   new {
     val scala = "3.1.3"
-    val scalajs_dom = "2.2.0"
+    val scalajs_dom = "2.0.0"
     val munit = "0.7.29"
     val laminar = "0.14.2"
   }
@@ -13,11 +13,16 @@ ThisBuild / scalaVersion := Versions.scala
 val publicDev = taskKey[String]("output directory for `npm run dev`")
 val publicProd = taskKey[String]("output directory for `npm run build`")
 
+val commonSettings = Seq(
+  dependencyUpdatesFailBuild := true
+)
+
 lazy val frontend = project
   .in(file("frontend"))
   .enablePlugins(ScalaJSPlugin)
   .enablePlugins(ScalablyTypedConverterExternalNpmPlugin)
   .settings(
+    commonSettings,
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
       _.withModuleKind(ModuleKind.ESModule)
@@ -44,6 +49,7 @@ lazy val frontend = project
 lazy val backend = project
   .in(file("backend"))
   .settings(
+    commonSettings,
     libraryDependencies ++= Seq(
       "org.scalameta" %% "munit" % Versions.munit % Test
     ),
@@ -61,9 +67,10 @@ lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("shared"))
   .settings(
+    commonSettings,
     libraryDependencies ++= Seq(
       "org.scalameta" %% "munit" % Versions.munit % Test
-    )
+    ),
   )
 
 def linkerOutputDirectory(

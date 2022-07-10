@@ -33,12 +33,11 @@ jobs:
       - name: Build project
         run: sbt test
 
-      - name: Compress target directories
-        run: tar cf targets.tar backend/target frontend/target
+      - name: Check project formatting
+        run: sbt scalafmtCheck test:scalafmtCheck
 
-      - name: Upload target directories
-        uses: actions/upload-artifact@v2
-        with:
-          name: target
-          path: targets.tar
+      - name: Check project dependencies
+        run: sbt dependencyUpdates
+
+
 
